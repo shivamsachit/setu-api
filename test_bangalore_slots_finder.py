@@ -63,6 +63,8 @@ class TestAllSuccess:
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == False
 
+        slots = []
+
         for response in results:
 
             assert response.status_code == 200
@@ -73,7 +75,9 @@ class TestAllSuccess:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) == 0
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) == 0
 
     def test_one_slot(self):
         '''
@@ -84,6 +88,8 @@ class TestAllSuccess:
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == False
 
+        slots = []
+
         for response in results:
 
             assert response.status_code == 200
@@ -94,7 +100,9 @@ class TestAllSuccess:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) == 1
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) == 1
 
     def test_three_slots(self):
         '''
@@ -105,6 +113,8 @@ class TestAllSuccess:
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == False
 
+        slots = []
+
         for response in results:
 
             assert response.status_code == 200
@@ -115,7 +125,9 @@ class TestAllSuccess:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) >= 3
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) >= 3
 
 
 @pytest.mark.usefixtures("data")
@@ -133,6 +145,8 @@ class TestSomeTimeouts:
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == True
 
+        slots = []
+
         for response in results:
 
             assert response.status_code == 200
@@ -143,7 +157,9 @@ class TestSomeTimeouts:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) == 0
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) == 0
 
     def test_three_slots_in_successful_calls(self):
         '''
@@ -154,6 +170,8 @@ class TestSomeTimeouts:
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == True
 
+        slots = []
+
         for response in results:
 
             assert response.status_code == 200
@@ -164,7 +182,9 @@ class TestSomeTimeouts:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) >= 3
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) >= 3
 
 
 @pytest.mark.usefixtures("data")
@@ -182,6 +202,8 @@ class TestSomeErrors:
 
         assert bool(results) == True and bool(exceptions) == True and bool(timeouts) == False
 
+        slots = []
+
         for response in results:
 
             assert response.status_code in ERROR_STATUS_CODES
@@ -192,7 +214,9 @@ class TestSomeErrors:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) == 0
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) == 0
 
     def test_three_slots_in_successful_calls(self):
         '''
@@ -203,6 +227,8 @@ class TestSomeErrors:
 
         assert bool(results) == True and bool(exceptions) == True and bool(timeouts) == False
 
+        slots = []
+
         for response in results:
 
             assert response.status_code in ERROR_STATUS_CODES
@@ -213,7 +239,9 @@ class TestSomeErrors:
 
             for location in locations:
 
-                assert len(location.get('slots', [])) >= 3
+                slots.extend(location.get('slots', []))
+
+        assert len(slots) >= 3
 
 
 @pytest.mark.usefixtures("data")
