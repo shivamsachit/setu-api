@@ -55,22 +55,22 @@ def mocked_get_bangalore_vaccine_slots(*args, **kwargs):
             return self.json_data
 
     CASE_MAPPING = {
-        1: ([MockResponse(SUCCESS_WITH_NO_SLOT, 200)], [], []),
-        2: ([MockResponse(SUCCESS_WITH_1_SLOT, 200)], [], []),
-        3: ([MockResponse(SUCCESS_WITH_3_SLOTS, 200)], [], []),
-        4: ([MockResponse(SUCCESS_WITH_NO_SLOT, 200)], [], [requests.Timeout('timeout')]),
-        5: ([MockResponse(SUCCESS_WITH_3_SLOTS, 200)], [], [requests.Timeout('timeout')]),
-        6: (
+        '1': ([MockResponse(SUCCESS_WITH_NO_SLOT, 200)], [], []),
+        '2': ([MockResponse(SUCCESS_WITH_1_SLOT, 200)], [], []),
+        '3': ([MockResponse(SUCCESS_WITH_3_SLOTS, 200)], [], []),
+        '4': ([MockResponse(SUCCESS_WITH_NO_SLOT, 200)], [], [requests.Timeout('timeout')]),
+        '5': ([MockResponse(SUCCESS_WITH_3_SLOTS, 200)], [], [requests.Timeout('timeout')]),
+        '6': (
             [MockResponse(SUCCESS_WITH_NO_SLOT, 200)],
             [requests.RequestException('exception')],
             [],
         ),
-        7: (
+        '7': (
             [MockResponse(SUCCESS_WITH_3_SLOTS, 200)],
             [requests.RequestException('exception')],
             [],
         ),
-        8: (
+        '8': (
             [
                 MockResponse({}, 500),
                 MockResponse({}, 500),
@@ -79,7 +79,7 @@ def mocked_get_bangalore_vaccine_slots(*args, **kwargs):
             [requests.RequestException('exception'), requests.RequestException('exception')],
             [],
         ),
-        9: (
+        '9': (
             [],
             [],
             [requests.Timeout('timeout'), requests.Timeout('timeout'), requests.Timeout('timeout')],
@@ -114,7 +114,7 @@ class TestAllSuccess:
         Function to run test to check if no slots were found
         '''
         # mock_get.return_value = {"sessions": [{'slots': []}]}
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case=1)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case='1')
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == False
 
@@ -145,7 +145,7 @@ class TestAllSuccess:
         Function to run test to check if 1 slot was found
         '''
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case=2)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case='2')
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == False
 
@@ -174,7 +174,7 @@ class TestAllSuccess:
         Function to run test to check if 3 slots were found
         '''
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case=3)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case='3')
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == False
 
@@ -210,7 +210,7 @@ class TestSomeTimeouts:
         Function to run test to check if no slots were found in any successful calls, along with some requests that timed out
         '''
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case=4)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case='4')
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == True
 
@@ -239,7 +239,7 @@ class TestSomeTimeouts:
         Function to run test to check if 3 slots were found in any successful calls, along with some requests that timed out
         '''
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case=5)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case='5')
 
         assert bool(results) == True and bool(exceptions) == False and bool(timeouts) == True
 
@@ -275,7 +275,7 @@ class TestSomeErrors:
         Function to run test to check if no slots were found in any successful calls, along with some requests that threw a 5xx status code
         '''
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case=6)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case='6')
 
         assert bool(results) == True and bool(exceptions) == True and bool(timeouts) == False
 
@@ -308,7 +308,7 @@ class TestSomeErrors:
         Function to run test to check if 3 slots were found in any successful calls, along with some requests that threw a 5xx status code
         '''
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case=7)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '560034', case='7')
 
         assert bool(results) == True and bool(exceptions) == True and bool(timeouts) == False
 
@@ -345,7 +345,7 @@ class TestAllFailures:
     )
     def test_failure(self, mock_get):
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case=8)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case='8')
 
         assert bool(exceptions) == True and bool(timeouts) == False
 
@@ -366,6 +366,6 @@ class TestAllTimeouts:
     )
     def test_timeouts(self, mock_get):
 
-        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case=9)
+        results, exceptions, timeouts = get_bangalore_vaccine_slots(self.date, '530068', case='9')
 
         assert bool(results) == False and bool(exceptions) == False and bool(timeouts) == True
