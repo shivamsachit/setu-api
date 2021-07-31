@@ -12,6 +12,7 @@ get_bangalore_vaccine_slots
 import json
 import os
 import pprint
+from datetime import datetime, timedelta
 
 import requests
 
@@ -22,7 +23,7 @@ API_URL = (
 HEADERS = {'accept': 'application/json', 'Accept-Language': 'hi_IN'}
 
 
-def get_bangalore_vaccine_slots(date, pincodes):
+def get_bangalore_vaccine_slots(date, pincodes, case=''):
     """
     This function calls the Setu Appointment Availability find by pin API,
     collects all the responses or exceptions, if any, and returns them
@@ -69,7 +70,7 @@ def get_bangalore_vaccine_slots(date, pincodes):
 
 if __name__ == "__main__":
 
-    date = os.getenv('DATE', '30-07-2021')
+    date = os.getenv('DATE', (datetime.today() + timedelta(days=1)).strftime('%d-%m-%Y'))
     pincodes = os.getenv('PINCODES', '[530068, 560004, 560034]')
     pincodes = json.loads(pincodes)
 
